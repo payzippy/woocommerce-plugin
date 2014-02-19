@@ -3,7 +3,7 @@
 /*
 Plugin Name: WooCommerce PayZippy Payment Gateway
 Description: Extends WooCommerce with PayZippy Payment Gateway.
-Version: 1.0.3
+Version: 1.0.4
 Author: PayZippy
 */
 require('lib/Constants.php');
@@ -274,11 +274,8 @@ function woocommerce_payzippy_init()
             $order = new WC_Order($order_id);
 
             // Callback url
-            // $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ?
-            //     get_site_url() . "/" :
-            //     get_permalink($this->redirect_page_id) .'&wc-api' ."=". get_class($this) ;
 
-                $redirect_url = get_site_url() . '?wc-api' ."=". get_class($this) ;
+            $redirect_url = get_site_url() . '?wc-api' ."=". get_class($this) ;
 
             $payment_method = get_post_meta($order_id, '_pz_payment_method', true);
 
@@ -461,12 +458,20 @@ function woocommerce_payzippy_init()
             }
 
             $callback_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
+        if (version_compare(WOOCOMMERCE_VERSION, '2.1.0', '>=')) {
+            $callback_url = add_query_arg(array('view-order' => $transaction_id,
+                    'key' => $transaction_key,
+                    'msg' => urlencode($message),
+                    'type' => $class),
+                $callback_url);
+        }
+        else {
             $callback_url = add_query_arg(array('order' => $transaction_id,
                     'key' => $transaction_key,
                     'msg' => urlencode($message),
                     'type' => $class),
                 $callback_url);
-
+        }
             wp_redirect($callback_url);
             exit;
 
@@ -494,6 +499,7 @@ function woocommerce_payzippy_init()
                         $pz_response->get_emi_months() . ' ' .
                         PZ_Constants::PAYMENT_METHODS($pz_response->get_payment_method());
                     break;
+
                 default:
                     $payment_method = $pz_response->get_payment_method();
             }
@@ -525,9 +531,9 @@ function woocommerce_payzippy_init()
             $order->add_order_note(mysql_real_escape_string($pz_order_note));
         }
 
-        /**
+        /*
          * Template for Payment Methods select input
-         */
+         
         function template_payment_methods($payment_methods)
         {
             ?>
@@ -543,7 +549,7 @@ function woocommerce_payzippy_init()
         <?php
         }
 
-        /*
+        
          * Template for EMI Months select input
         function template_emi_months()
         {
