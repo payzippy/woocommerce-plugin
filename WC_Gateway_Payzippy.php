@@ -3,7 +3,7 @@
 /*
 Plugin Name: WooCommerce PayZippy Payment Gateway
 Description: Extends WooCommerce with PayZippy Payment Gateway.
-Version: 1.0.4
+Version: 1.0.5
 Author: PayZippy
 */
 require('lib/Constants.php');
@@ -38,7 +38,7 @@ function woocommerce_payzippy_init()
      *
      * @class          WC_PayZippy
      * @extends        WC_Payment_Gateway
-     * @version        1.0.0
+     * @version        1.0.5
      */
     class WC_PayZippy extends WC_Payment_Gateway
     {
