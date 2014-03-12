@@ -3,7 +3,7 @@
 /*
 Plugin Name: WooCommerce PayZippy Payment Gateway
 Description: Extends WooCommerce with PayZippy Payment Gateway.
-Version: 1.0.5
+Version: 1.0.6
 Author: PayZippy
 */
 require('lib/Constants.php');
@@ -223,6 +223,7 @@ function woocommerce_payzippy_init()
         //can be commented
         function payment_fields()
         {
+	    if($this->description) echo wpautop(wptexturize($this->description));
             //$this->template_payment_methods($this->payment_methods_available);
             //$this->template_emi_months();
             //$this->template_bank_names();
