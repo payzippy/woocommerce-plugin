@@ -3,7 +3,7 @@
 /*
 Plugin Name: WooCommerce PayZippy Payment Gateway
 Description: Extends WooCommerce with PayZippy Payment Gateway.
-Version: 1.0.6
+Version: 1.0.7
 Author: PayZippy
 */
 require('lib/Constants.php');
@@ -411,7 +411,7 @@ function woocommerce_payzippy_init()
             global $woocommerce;
 
             // Instantiate the ChargingResponse class.
-            $pz_response = new ChargingResponse($_REQUEST, $this->settings);
+            $pz_response = new ChargingResponse(array_merge($_POST,$_GET), $this->settings);
 
             if ($pz_response->get_merchant_transaction_id() != '') {
                 $transaction_id = $pz_response->get_merchant_transaction_id();
